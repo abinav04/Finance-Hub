@@ -100,6 +100,7 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
+  overflow-x: hidden;
   transition: background-color 0.4s ease, color 0.4s ease;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;

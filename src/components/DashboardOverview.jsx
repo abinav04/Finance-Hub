@@ -97,9 +97,9 @@ export default function DashboardOverview({ transactions }) {
       </div>
 
       <div className="dashboard-grid">
-        <div className="glass-panel">
+        <div className="glass-panel" style={{ minWidth: 0, overflow: 'hidden' }}>
           <h3 style={{ marginBottom: '24px', fontSize: '18px', fontWeight: 600 }}>Balance Trend</h3>
-          <div style={{ height: '300px' }}>
+          <div style={{ height: '300px', width: '100%', minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={trendData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <defs>
@@ -121,9 +121,9 @@ export default function DashboardOverview({ transactions }) {
           </div>
         </div>
 
-        <div className="glass-panel">
+        <div className="glass-panel" style={{ minWidth: 0, overflow: 'hidden' }}>
           <h3 style={{ marginBottom: '24px', fontSize: '18px', fontWeight: 600 }}>Spending Breakdown</h3>
-          <div style={{ height: '300px', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ height: '300px', display: 'flex', flexDirection: 'column', width: '100%', minWidth: 0 }}>
             {expenseData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { CATEGORIES } from '../data';
 import { X } from 'lucide-react';
 import { motion } from 'framer-motion';
-import Dropdown from './Dropdown';
 
 export default function AddTransactionModal({ onClose, onAdd }) {
   const [formData, setFormData] = useState({
@@ -133,18 +132,40 @@ export default function AddTransactionModal({ onClose, onAdd }) {
 
           <div className="form-group">
             <label>Category</label>
-            <Dropdown 
-              value={formData.category} 
-              onChange={(val) => setFormData(prev => ({ ...prev, category: val }))}
-              options={CATEGORIES.map(cat => ({ value: cat, label: cat }))}
-              fullWidth={true}
-              buttonStyle={{ 
-                padding: '14px 16px', 
-                backgroundColor: 'var(--bg-tertiary)', 
-                border: '1px solid var(--border-color)', 
-                fontSize: '15px' 
-              }}
-            />
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
+              {CATEGORIES.map(cat => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => handleChange({ target: { name: 'category', value: cat } })}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: 'var(--radius-full)',
+                    border: formData.category === cat ? '1px solid var(--accent-primary)' : '1px solid var(--border-color)',
+                    backgroundColor: formData.category === cat ? 'var(--accent-light)' : 'var(--bg-tertiary)',
+                    color: formData.category === cat ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                    fontWeight: 600,
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (formData.category !== cat) {
+                      e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+                      e.currentTarget.style.color = 'var(--text-primary)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (formData.category !== cat) {
+                      e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)';
+                      e.currentTarget.style.color = 'var(--text-secondary)';
+                    }
+                  }}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="flex justify-between mt-8 gap-4">

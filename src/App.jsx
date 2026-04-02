@@ -8,6 +8,7 @@ import SplashLoader from './components/SplashLoader';
 import ThemeToggle from './components/ThemeToggle';
 import RoleSelector from './components/RoleSelector';
 import SkeletonLoader from './components/SkeletonLoader';
+import Logo from './components/Logo';
 import { Moon, Sun, LayoutDashboard, List, Lightbulb } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster, toast } from 'react-hot-toast';
@@ -116,7 +117,14 @@ function App() {
       <main className="main-content">
         <header className="header">
           <div>
-            <h1>Finance Hub</h1>
+            <div 
+              onClick={() => handleTabChange('dashboard')} 
+              style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px' }}
+              title="Go to Overview"
+            >
+              <Logo size={32} />
+              <h1 style={{ lineHeight: 1 }}>Finance Hub</h1>
+            </div>
             <p style={{ color: 'var(--text-secondary)', marginTop: '4px' }}>
               Welcome back. Here is your financial overview.
             </p>
