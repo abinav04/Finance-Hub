@@ -11,6 +11,7 @@ import ThemeToggle from './components/ThemeToggle';
 import RoleSelector from './components/RoleSelector';
 import SkeletonLoader from './components/SkeletonLoader';
 import Logo from './components/Logo';
+import DownloadButton from './components/DownloadButton';
 import { Moon, Sun, LayoutDashboard, List, Lightbulb } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster, toast } from 'react-hot-toast';
@@ -141,6 +142,7 @@ function App() {
           </div>
           
           <div className="header-actions">
+            <DownloadButton transactions={transactions} />
             <RoleSelector role={role} setRole={setRole} />
             
             <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
