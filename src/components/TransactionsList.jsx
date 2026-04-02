@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, Trash2 } from 'lucide-react';
+import { Search, Filter, Trash2, Edit } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Dropdown from './Dropdown';
 
-export default function TransactionsList({ transactions, role, onDelete }) {
+export default function TransactionsList({ transactions, role, onDelete, onEdit, onView }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [sortBy, setSortBy] = useState('date');
@@ -89,7 +89,7 @@ export default function TransactionsList({ transactions, role, onDelete }) {
                   {role === 'admin' && (
                     <motion.th 
                       initial={{ opacity: 0, paddingLeft: 0, paddingRight: 0, width: 0 }}
-                      animate={{ opacity: 1, paddingLeft: 24, paddingRight: 24, width: 50 }}
+                      animate={{ opacity: 1, paddingLeft: 24, paddingRight: 24, width: 80 }}
                       exit={{ opacity: 0, paddingLeft: 0, paddingRight: 0, width: 0 }}
                       style={{ textAlign: 'center', overflow: 'hidden', whiteSpace: 'nowrap' }}
                     >
@@ -102,7 +102,12 @@ export default function TransactionsList({ transactions, role, onDelete }) {
             <tbody>
               {filteredAndSorted.length > 0 ? (
                 filteredAndSorted.map(tx => (
-                  <tr key={tx.id}>
+                  <tr 
+                    key={tx.id} 
+                    onClick={() => onView(tx)} 
+                    style={{ cursor: 'pointer' }}
+                    className="hoverable-row"
+                  >
                     <td>{new Date(tx.date).toLocaleDateString()}</td>
                     <td style={{ fontWeight: 500 }}>{tx.merchant}</td>
                     <td>{tx.category}</td>
@@ -118,23 +123,37 @@ export default function TransactionsList({ transactions, role, onDelete }) {
                       {role === 'admin' && (
                         <motion.td 
                           initial={{ opacity: 0, paddingLeft: 0, paddingRight: 0, width: 0 }}
-                          animate={{ opacity: 1, paddingLeft: 24, paddingRight: 24, width: 50 }}
+                          animate={{ opacity: 1, paddingLeft: 24, paddingRight: 24, width: 80 }}
                           exit={{ opacity: 0, paddingLeft: 0, paddingRight: 0, width: 0 }}
                           transition={{ type: "spring", stiffness: 300, damping: 28 }}
                           style={{ textAlign: 'center', overflow: 'hidden', padding: 0 }}
                         >
-                          <motion.button 
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            exit={{ scale: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="btn-icon" 
-                            style={{ color: 'var(--danger)', padding: '6px', margin: '0 auto', display: 'flex' }}
-                            onClick={() => onDelete(tx.id)}
-                            title="Delete Transaction"
-                          >
-                            <Trash2 size={16} />
-                          </motion.button>
+                          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                            <motion.button 
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              exit={{ scale: 0 }}
+                              transition={{ delay: 0.1 }}
+                              className="btn-icon" 
+                              style={{ color: 'var(--accent-primary)', padding: '6px', display: 'flex' }}
+                              onClick={(e) => { e.stopPropagation(); onEdit(tx); }}
+                              title="Edit Transaction"
+                            >
+                              <Edit size={16} />
+                            </motion.button>
+                            <motion.button 
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              exit={{ scale: 0 }}
+                              transition={{ delay: 0.1 }}
+                              className="btn-icon" 
+                              style={{ color: 'var(--danger)', padding: '6px', display: 'flex' }}
+                              onClick={(e) => { e.stopPropagation(); onDelete(tx.id); }}
+                              title="Delete Transaction"
+                            >
+                              <Trash2 size={16} />
+                            </motion.button>
+                          </div>
                         </motion.td>
                       )}
                     </AnimatePresence>

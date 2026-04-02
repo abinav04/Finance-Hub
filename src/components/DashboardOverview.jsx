@@ -3,11 +3,41 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
-import { Wallet, TrendingUp, TrendingDown } from 'lucide-react';
+import { Wallet, TrendingUp, TrendingDown, Calendar } from 'lucide-react';
+import Dropdown from './Dropdown';
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#64748b'];
 
 export default function DashboardOverview({ transactions }) {
+  const [selectedMonth, setSelectedMonth] = React.useState('all');
+
+  const monthOptions = useMemo(() => {
+    const options = [{ value: 'all', label: 'All Time' }];
+    const monthsFound = new Set();
+    
+    transactions.forEach(t => {
+      const d = new Date(t.date);
+      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+      if (!monthsFound.has(key)) {
+        monthsFound.add(key);
+        options.push({
+          value: key,
+          label: d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+        });
+      }
+    });
+    
+    // Sort options by date (newest first, keeping 'all' at top)
+    const [all, ...others] = options;
+    others.sort((a, b) => {
+      const [yearA, monthA] = a.value.split('-').map(Number);
+      const [yearB, monthB] = b.value.split('-').map(Number);
+      return yearB !== yearA ? yearB - yearA : monthB - monthA;
+    });
+    
+    return [all, ...others];
+  }, [transactions]);
+
   const stats = useMemo(() => {
     let income = 0;
     let expenses = 0;
@@ -25,14 +55,24 @@ export default function DashboardOverview({ transactions }) {
   // Aggregate for Pie Chart (Expense breakdown)
   const expenseData = useMemo(() => {
     const categories = {};
-    transactions.filter(t => t.type === 'expense').forEach(t => {
+    let filtered = transactions.filter(t => t.type === 'expense');
+    
+    if (selectedMonth !== 'all') {
+      const [year, month] = selectedMonth.split('-').map(Number);
+      filtered = filtered.filter(t => {
+        const d = new Date(t.date);
+        return d.getFullYear() === year && (d.getMonth() + 1) === month;
+      });
+    }
+
+    filtered.forEach(t => {
       categories[t.category] = (categories[t.category] || 0) + Number(t.amount);
     });
     return Object.keys(categories).map(key => ({
       name: key,
       value: categories[key]
     })).sort((a, b) => b.value - a.value);
-  }, [transactions]);
+  }, [transactions, selectedMonth]);
 
   // Aggregate for Area chart (Balance trend over time proxy)
   // Just sorting by date and keeping a running balance
@@ -122,7 +162,18 @@ export default function DashboardOverview({ transactions }) {
         </div>
 
         <div className="glass-panel" style={{ minWidth: 0, overflow: 'hidden' }}>
-          <h3 style={{ marginBottom: '24px', fontSize: '18px', fontWeight: 600 }}>Spending Breakdown</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 600 }}>Spending Breakdown</h3>
+            <div className="input-group" style={{ padding: '2px 8px', maxWidth: '180px' }}>
+              <Calendar size={16} color="var(--text-tertiary)" />
+              <Dropdown 
+                value={selectedMonth} 
+                onChange={setSelectedMonth}
+                options={monthOptions}
+                buttonStyle={{ padding: '4px 8px', minWidth: '120px' }}
+              />
+            </div>
+          </div>
           <div style={{ height: '300px', display: 'flex', flexDirection: 'column', width: '100%', minWidth: 0 }}>
             {expenseData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">

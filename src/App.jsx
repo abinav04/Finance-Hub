@@ -4,6 +4,8 @@ import DashboardOverview from './components/DashboardOverview';
 import TransactionsList from './components/TransactionsList';
 import InsightsPanel from './components/InsightsPanel';
 import AddTransactionModal from './components/AddTransactionModal';
+import EditTransactionModal from './components/EditTransactionModal';
+import TransactionDetailsModal from './components/TransactionDetailsModal';
 import SplashLoader from './components/SplashLoader';
 import ThemeToggle from './components/ThemeToggle';
 import RoleSelector from './components/RoleSelector';
@@ -28,6 +30,8 @@ function App() {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState(null);
+  const [viewingTransaction, setViewingTransaction] = useState(null);
 
   // Persist to local storage
   useEffect(() => {
@@ -73,6 +77,12 @@ function App() {
     } else {
       toast.error('Rejected: Admin privileges required');
     }
+  };
+
+  const handleEditTransaction = (updatedTx) => {
+    setTransactions(prev => prev.map(tx => tx.id === updatedTx.id ? updatedTx : tx));
+    setEditingTransaction(null);
+    toast.success('Transaction updated successfully!');
   };
 
   return (
@@ -212,6 +222,8 @@ function App() {
                     transactions={transactions} 
                     role={role} 
                     onDelete={handleDeleteTransaction}
+                    onEdit={(tx) => setEditingTransaction(tx)}
+                    onView={(tx) => setViewingTransaction(tx)}
                   />
                 </motion.div>
               )}
@@ -236,6 +248,23 @@ function App() {
         <AddTransactionModal 
           onClose={() => setIsModalOpen(false)} 
           onAdd={handleAddTransaction} 
+        />
+      )}
+
+      {/* Edit Transaction Modal */}
+      {editingTransaction && (
+        <EditTransactionModal 
+          transaction={editingTransaction}
+          onClose={() => setEditingTransaction(null)} 
+          onEdit={handleEditTransaction} 
+        />
+      )}
+
+      {/* View Transaction Details Modal */}
+      {viewingTransaction && (
+        <TransactionDetailsModal
+          transaction={viewingTransaction}
+          onClose={() => setViewingTransaction(null)}
         />
       )}
         </motion.div>

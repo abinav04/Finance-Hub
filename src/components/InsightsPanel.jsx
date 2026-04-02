@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { AlertCircle, TrendingDown, Target, Zap } from 'lucide-react';
+import { AlertCircle, TrendingDown, Target, Zap, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function InsightsPanel({ transactions }) {
   const insights = useMemo(() => {
@@ -32,11 +33,52 @@ export default function InsightsPanel({ transactions }) {
     const incomeCount = transactions.filter(t => t.type === 'income').length;
     const expenseCount = expenses.length;
 
+    // Monthly Comparison
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    
+    const lastMonthDate = new Date(currentYear, currentMonth - 1, 1);
+    const lastMonth = lastMonthDate.getMonth();
+    const lastMonthYear = lastMonthDate.getFullYear();
+
+    const getMonthData = (m, y) => {
+      const monthTransactions = transactions.filter(t => {
+        const d = new Date(t.date);
+        return d.getMonth() === m && d.getFullYear() === y;
+      });
+      
+      const income = monthTransactions
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + Number(t.amount), 0);
+        
+      const expense = monthTransactions
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + Number(t.amount), 0);
+        
+      return { income, expense };
+    };
+
+    const currentData = getMonthData(currentMonth, currentYear);
+    const prevData = getMonthData(lastMonth, lastMonthYear);
+
+    const calculateChange = (curr, prev) => {
+      if (prev === 0) return curr > 0 ? 100 : 0;
+      return ((curr - prev) / prev) * 100;
+    };
+
+    const incomeChange = calculateChange(currentData.income, prevData.income);
+    const expenseChange = calculateChange(currentData.expense, prevData.expense);
+
     return {
       highestCategory,
       biggestExpense,
       incomeCount,
-      expenseCount
+      expenseCount,
+      currentData,
+      prevData,
+      incomeChange,
+      expenseChange
     };
   }, [transactions]);
 
@@ -119,6 +161,98 @@ export default function InsightsPanel({ transactions }) {
           <p style={{ fontSize: '15px', fontStyle: 'italic', color: 'var(--text-primary)', lineHeight: '1.6' }}>
             "Tracking your expenses is the first step towards financial freedom."
           </p>
+        </div>
+      </div>
+
+      {/* Monthly Comparison Card */}
+      <div className="glass-panel" style={{ gridColumn: '1 / -1' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+          <TrendingDown size={24} color="var(--accent-primary)" />
+          <h3 style={{ fontSize: '20px', fontWeight: 700 }}>Monthly Performance</h3>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+          {/* Income Comparison */}
+          <div style={{ 
+            padding: '24px', 
+            borderRadius: 'var(--radius-xl)', 
+            backgroundColor: 'var(--bg-tertiary)',
+            border: '1px solid var(--border-color)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <span style={{ fontSize: '14px', color: 'var(--text-secondary)', fontWeight: 600 }}>Income vs Last Month</span>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '4px',
+                padding: '4px 8px',
+                borderRadius: 'var(--radius-full)',
+                fontSize: '13px',
+                fontWeight: 700,
+                backgroundColor: insights.incomeChange >= 0 ? 'var(--success-bg)' : 'var(--danger-bg)',
+                color: insights.incomeChange >= 0 ? 'var(--success)' : 'var(--danger)'
+              }}>
+                {insights.incomeChange > 0 ? <ArrowUpRight size={14} /> : (insights.incomeChange < 0 ? <ArrowDownRight size={14} /> : <Minus size={14} />)}
+                {Math.abs(insights.incomeChange).toFixed(1)}%
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+              <h4 style={{ fontSize: '28px', fontWeight: 800 }}>${insights.currentData.income.toFixed(2)}</h4>
+              <span style={{ fontSize: '14px', color: 'var(--text-tertiary)' }}>from ${insights.prevData.income.toFixed(2)}</span>
+            </div>
+            <div style={{ height: '4px', backgroundColor: 'var(--border-color)', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${Math.min(100, (insights.currentData.income / (insights.prevData.income || 1)) * 100)}%` }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                style={{ height: '100%', backgroundColor: 'var(--success)' }}
+              />
+            </div>
+          </div>
+
+          {/* Expense Comparison */}
+          <div style={{ 
+            padding: '24px', 
+            borderRadius: 'var(--radius-xl)', 
+            backgroundColor: 'var(--bg-tertiary)',
+            border: '1px solid var(--border-color)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <span style={{ fontSize: '14px', color: 'var(--text-secondary)', fontWeight: 600 }}>Expense vs Last Month</span>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '4px',
+                padding: '4px 8px',
+                borderRadius: 'var(--radius-full)',
+                fontSize: '13px',
+                fontWeight: 700,
+                backgroundColor: insights.expenseChange <= 0 ? 'var(--success-bg)' : 'var(--danger-bg)',
+                color: insights.expenseChange <= 0 ? 'var(--success)' : 'var(--danger)'
+              }}>
+                {insights.expenseChange < 0 ? <ArrowDownRight size={14} /> : (insights.expenseChange > 0 ? <ArrowUpRight size={14} /> : <Minus size={14} />)}
+                {Math.abs(insights.expenseChange).toFixed(1)}%
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+              <h4 style={{ fontSize: '28px', fontWeight: 800 }}>${insights.currentData.expense.toFixed(2)}</h4>
+              <span style={{ fontSize: '14px', color: 'var(--text-tertiary)' }}>from ${insights.prevData.expense.toFixed(2)}</span>
+            </div>
+            <div style={{ height: '4px', backgroundColor: 'var(--border-color)', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${Math.min(100, (insights.currentData.expense / (insights.prevData.expense || 1)) * 100)}%` }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                style={{ height: '100%', backgroundColor: insights.expenseChange <= 0 ? 'var(--success)' : 'var(--danger)' }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
