@@ -5,6 +5,9 @@ import TransactionsList from './components/TransactionsList';
 import InsightsPanel from './components/InsightsPanel';
 import AddTransactionModal from './components/AddTransactionModal';
 import SplashLoader from './components/SplashLoader';
+import ThemeToggle from './components/ThemeToggle';
+import RoleSelector from './components/RoleSelector';
+import SkeletonLoader from './components/SkeletonLoader';
 import { Moon, Sun, LayoutDashboard, List, Lightbulb } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster, toast } from 'react-hot-toast';
@@ -14,6 +17,7 @@ function App() {
   const [role, setRole] = useState('viewer'); // 'viewer' or 'admin'
   const [activeTab, setActiveTab] = useState('dashboard'); // dashboard, transactions, insights
   const [loadingPage, setLoadingPage] = useState('Finance Hub');
+  const [isTabSwapping, setIsTabSwapping] = useState(false);
   
   // State: Transactions
   const [transactions, setTransactions] = useState(() => {
@@ -47,8 +51,8 @@ function App() {
       insights: 'Smart Insights'
     };
     
+    setActiveTab(tabId);
     setLoadingPage(pageMap[tabId]);
-    setTimeout(() => setActiveTab(tabId), 10);
   };
 
   const handleAddTransaction = (newTx) => {
@@ -77,7 +81,11 @@ function App() {
           key="loader" 
           pageName={loadingPage}
           durationMs={loadingPage === 'Finance Hub' ? 2500 : 800} 
-          onComplete={() => setLoadingPage(null)} 
+          onComplete={() => {
+            setLoadingPage(null);
+            setIsTabSwapping(true);
+            setTimeout(() => setIsTabSwapping(false), 1000);
+          }} 
         />
       ) : (
         <motion.div 
@@ -115,27 +123,24 @@ function App() {
           </div>
           
           <div className="header-actions">
-            <select 
-              value={role} 
-              onChange={(e) => setRole(e.target.value)}
-              className="role-selector"
-            >
-              <option value="viewer">👁️ Viewer</option>
-              <option value="admin">⚙️ Admin</option>
-            </select>
+            <RoleSelector role={role} setRole={setRole} />
             
-            <button onClick={toggleTheme} className="btn-icon" title="Toggle Theme">
-              {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-            </button>
+            <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
             
-            {role === 'admin' && (
-              <button 
-                className="btn btn-primary"
-                onClick={() => setIsModalOpen(true)}
-              >
-                + Add Transaction
-              </button>
-            )}
+            <AnimatePresence>
+              {role === 'admin' && (
+                <motion.button 
+                  initial={{ opacity: 0, scale: 0.8, x: -10 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, x: -10 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  className="btn btn-primary"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  + Add Transaction
+                </motion.button>
+              )}
+            </AnimatePresence>
           </div>
         </header>
 
@@ -163,42 +168,57 @@ function App() {
 
         {/* Main Content Area */}
         <AnimatePresence mode="wait">
-          {activeTab === 'dashboard' && (
+          {isTabSwapping ? (
             <motion.div
-              key="dashboard"
-              initial={{ opacity: 0, y: 20 }}
+              key={`skeleton-${activeTab}`}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}
             >
-              <DashboardOverview transactions={transactions} />
+              <SkeletonLoader type={activeTab} />
             </motion.div>
-          )}
-          {activeTab === 'transactions' && (
-            <motion.div
-              key="transactions"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
-            >
-              <TransactionsList 
-                transactions={transactions} 
-                role={role} 
-                onDelete={handleDeleteTransaction}
-              />
-            </motion.div>
-          )}
-          {activeTab === 'insights' && (
-            <motion.div
-              key="insights"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
-            >
-              <InsightsPanel transactions={transactions} />
-            </motion.div>
+          ) : (
+            <>
+              {activeTab === 'dashboard' && (
+                <motion.div
+                  key="dashboard"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+                >
+                  <DashboardOverview transactions={transactions} />
+                </motion.div>
+              )}
+              {activeTab === 'transactions' && (
+                <motion.div
+                  key="transactions"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+                >
+                  <TransactionsList 
+                    transactions={transactions} 
+                    role={role} 
+                    onDelete={handleDeleteTransaction}
+                  />
+                </motion.div>
+              )}
+              {activeTab === 'insights' && (
+                <motion.div
+                  key="insights"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+                >
+                  <InsightsPanel transactions={transactions} />
+                </motion.div>
+              )}
+            </>
           )}
         </AnimatePresence>
       </main>

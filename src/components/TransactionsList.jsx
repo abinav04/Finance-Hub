@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Filter, Trash2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Dropdown from './Dropdown';
 
 export default function TransactionsList({ transactions, role, onDelete }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,28 +50,28 @@ export default function TransactionsList({ transactions, role, onDelete }) {
           </div>
           
           <div className="flex gap-4 items-center">
-            <div className="input-group" style={{ padding: '4px 8px' }}>
+            <div className="input-group" style={{ padding: '2px 8px' }}>
               <Filter size={16} color="var(--text-tertiary)" />
-              <select 
+              <Dropdown 
                 value={filterType} 
-                onChange={(e) => setFilterType(e.target.value)}
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)' }}
-              >
-                <option value="all">All Types</option>
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
-              </select>
+                onChange={setFilterType}
+                options={[
+                  { value: 'all', label: 'All Types' },
+                  { value: 'income', label: 'Income' },
+                  { value: 'expense', label: 'Expense' }
+                ]}
+              />
             </div>
             
-            <div className="input-group" style={{ padding: '4px 8px' }}>
-              <select 
+            <div className="input-group" style={{ padding: '2px 8px' }}>
+              <Dropdown 
                 value={sortBy} 
-                onChange={(e) => setSortBy(e.target.value)}
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)' }}
-              >
-                <option value="date">Sort by Date</option>
-                <option value="amount">Sort by Amount</option>
-              </select>
+                onChange={setSortBy}
+                options={[
+                  { value: 'date', label: 'Sort by Date' },
+                  { value: 'amount', label: 'Sort by Amount' }
+                ]}
+              />
             </div>
           </div>
         </div>
@@ -83,7 +85,18 @@ export default function TransactionsList({ transactions, role, onDelete }) {
                 <th>Category</th>
                 <th>Type</th>
                 <th style={{ textAlign: 'right' }}>Amount</th>
-                {role === 'admin' && <th style={{ width: '50px', textAlign: 'center' }}>Actions</th>}
+                <AnimatePresence>
+                  {role === 'admin' && (
+                    <motion.th 
+                      initial={{ opacity: 0, paddingLeft: 0, paddingRight: 0, width: 0 }}
+                      animate={{ opacity: 1, paddingLeft: 24, paddingRight: 24, width: 50 }}
+                      exit={{ opacity: 0, paddingLeft: 0, paddingRight: 0, width: 0 }}
+                      style={{ textAlign: 'center', overflow: 'hidden', whiteSpace: 'nowrap' }}
+                    >
+                      Actions
+                    </motion.th>
+                  )}
+                </AnimatePresence>
               </tr>
             </thead>
             <tbody>
@@ -101,18 +114,30 @@ export default function TransactionsList({ transactions, role, onDelete }) {
                     <td style={{ textAlign: 'right' }} className={`tx-amount ${tx.type}`}>
                       {tx.type === 'income' ? '+' : '-'}${Number(tx.amount).toFixed(2)}
                     </td>
-                    {role === 'admin' && (
-                      <td style={{ textAlign: 'center' }}>
-                        <button 
-                          className="btn-icon" 
-                          style={{ color: 'var(--danger)', padding: '6px' }}
-                          onClick={() => onDelete(tx.id)}
-                          title="Delete Transaction"
+                    <AnimatePresence>
+                      {role === 'admin' && (
+                        <motion.td 
+                          initial={{ opacity: 0, paddingLeft: 0, paddingRight: 0, width: 0 }}
+                          animate={{ opacity: 1, paddingLeft: 24, paddingRight: 24, width: 50 }}
+                          exit={{ opacity: 0, paddingLeft: 0, paddingRight: 0, width: 0 }}
+                          transition={{ type: "spring", stiffness: 300, damping: 28 }}
+                          style={{ textAlign: 'center', overflow: 'hidden', padding: 0 }}
                         >
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
-                    )}
+                          <motion.button 
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            exit={{ scale: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="btn-icon" 
+                            style={{ color: 'var(--danger)', padding: '6px', margin: '0 auto', display: 'flex' }}
+                            onClick={() => onDelete(tx.id)}
+                            title="Delete Transaction"
+                          >
+                            <Trash2 size={16} />
+                          </motion.button>
+                        </motion.td>
+                      )}
+                    </AnimatePresence>
                   </tr>
                 ))
               ) : (

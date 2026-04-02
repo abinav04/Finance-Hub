@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
+  color-scheme: light;
   --bg-primary: #ffffff;
   --bg-secondary: #ffffff;
   --bg-tertiary: #f8fafc;
@@ -38,6 +39,7 @@
 }
 
 [data-theme='dark'] {
+  color-scheme: dark;
   --bg-primary: #09090b;
   --bg-secondary: #18181b;
   --bg-tertiary: #27272a;
@@ -396,13 +398,12 @@ input, select {
 .btn-primary {
   background-color: var(--accent-primary);
   color: white;
-  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+  box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.39);
 }
 
 .btn-primary:hover {
   background-color: var(--accent-secondary);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.23);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.23);
 }
 
 .btn-icon {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CATEGORIES } from '../data';
 import { X } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Dropdown from './Dropdown';
 
 export default function AddTransactionModal({ onClose, onAdd }) {
   const [formData, setFormData] = useState({
@@ -38,7 +39,13 @@ export default function AddTransactionModal({ onClose, onAdd }) {
       >
         <div className="flex justify-between items-center mb-6">
           <h2 style={{ fontSize: '20px', fontWeight: 600 }}>Add New Transaction</h2>
-          <button onClick={onClose} className="btn-icon" style={{ padding: '6px' }} title="Close">
+          <button 
+            type="button"
+            onClick={onClose} 
+            className="btn-icon" 
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', padding: 0 }} 
+            title="Close"
+          >
             <X size={20} />
           </button>
         </div>
@@ -46,25 +53,41 @@ export default function AddTransactionModal({ onClose, onAdd }) {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Type</label>
-            <div className="flex gap-4">
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                <input 
-                  type="radio" 
-                  name="type" 
-                  value="expense" 
-                  checked={formData.type === 'expense'}
-                  onChange={handleChange}
-                /> Expense
-              </label>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                <input 
-                  type="radio" 
-                  name="type" 
-                  value="income" 
-                  checked={formData.type === 'income'}
-                  onChange={handleChange}
-                /> Income
-              </label>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <button
+                type="button"
+                onClick={() => handleChange({ target: { name: 'type', value: 'expense' } })}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  borderRadius: 'var(--radius-md)',
+                  border: formData.type === 'expense' ? '2px solid var(--danger)' : '1px solid var(--border-color)',
+                  backgroundColor: formData.type === 'expense' ? 'var(--danger-bg)' : 'var(--bg-tertiary)',
+                  color: formData.type === 'expense' ? 'var(--danger)' : 'var(--text-primary)',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Expense
+              </button>
+              <button
+                type="button"
+                onClick={() => handleChange({ target: { name: 'type', value: 'income' } })}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  borderRadius: 'var(--radius-md)',
+                  border: formData.type === 'income' ? '2px solid var(--success)' : '1px solid var(--border-color)',
+                  backgroundColor: formData.type === 'income' ? 'var(--success-bg)' : 'var(--bg-tertiary)',
+                  color: formData.type === 'income' ? 'var(--success)' : 'var(--text-primary)',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Income
+              </button>
             </div>
           </div>
 
@@ -110,16 +133,18 @@ export default function AddTransactionModal({ onClose, onAdd }) {
 
           <div className="form-group">
             <label>Category</label>
-            <select 
-              name="category" 
-              className="form-control" 
+            <Dropdown 
               value={formData.category} 
-              onChange={handleChange}
-            >
-              {CATEGORIES.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
+              onChange={(val) => setFormData(prev => ({ ...prev, category: val }))}
+              options={CATEGORIES.map(cat => ({ value: cat, label: cat }))}
+              fullWidth={true}
+              buttonStyle={{ 
+                padding: '14px 16px', 
+                backgroundColor: 'var(--bg-tertiary)', 
+                border: '1px solid var(--border-color)', 
+                fontSize: '15px' 
+              }}
+            />
           </div>
 
           <div className="flex justify-between mt-8 gap-4">
