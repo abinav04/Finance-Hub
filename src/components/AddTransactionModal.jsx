@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CATEGORIES } from '../data';
 import { X } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -11,6 +11,13 @@ export default function AddTransactionModal({ onClose, onAdd }) {
     category: CATEGORIES[0],
     type: 'expense'
   });
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

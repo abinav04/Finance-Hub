@@ -15,6 +15,13 @@ export default function EditTransactionModal({ transaction, onClose, onEdit }) {
   const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
+  useEffect(() => {
     if (transaction) {
       setFormData({
         ...transaction,

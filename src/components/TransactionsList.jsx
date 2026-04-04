@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search, Filter, Trash2, Edit } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Dropdown from './Dropdown';
@@ -7,6 +7,18 @@ export default function TransactionsList({ transactions, role, onDelete, onEdit,
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [sortBy, setSortBy] = useState('date');
+  const [transactionToDelete, setTransactionToDelete] = useState(null);
+
+  useEffect(() => {
+    if (transactionToDelete) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [transactionToDelete]);
 
   const filteredAndSorted = useMemo(() => {
     let result = [...transactions];
@@ -108,7 +120,7 @@ export default function TransactionsList({ transactions, role, onDelete, onEdit,
                     style={{ cursor: 'pointer' }}
                     className="hoverable-row"
                   >
-                    <td>{new Date(tx.date).toLocaleDateString()}</td>
+                    <td>{new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
                     <td style={{ fontWeight: 500 }}>{tx.merchant}</td>
                     <td>{tx.category}</td>
                     <td>
@@ -148,7 +160,7 @@ export default function TransactionsList({ transactions, role, onDelete, onEdit,
                               transition={{ delay: 0.1 }}
                               className="btn-icon" 
                               style={{ color: 'var(--danger)', padding: '6px', display: 'flex' }}
-                              onClick={(e) => { e.stopPropagation(); onDelete(tx.id); }}
+                              onClick={(e) => { e.stopPropagation(); setTransactionToDelete(tx.id); }}
                               title="Delete Transaction"
                             >
                               <Trash2 size={16} />
@@ -170,6 +182,41 @@ export default function TransactionsList({ transactions, role, onDelete, onEdit,
           </table>
         </div>
       </div>
+
+      <AnimatePresence>
+        {transactionToDelete && (
+          <div className="modal-overlay" style={{ zIndex: 1100, backgroundColor: 'rgba(0,0,0,0.4)' }}>
+            <motion.div 
+              className="modal-content"
+              style={{ maxWidth: '400px', textAlign: 'center', padding: '32px' }}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            >
+              <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '12px' }}>Confirm Deletion</h3>
+              <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', lineHeight: '1.5' }}>
+                Are you sure you want to delete this transaction? This action cannot be undone.
+              </p>
+              <div className="flex gap-4">
+                <button 
+                  className="btn" 
+                  onClick={() => setTransactionToDelete(null)} 
+                  style={{ flex: 1, border: '1px solid var(--border-color)', justifyContent: 'center' }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="btn btn-primary" 
+                  onClick={() => { onDelete(transactionToDelete); setTransactionToDelete(null); }} 
+                  style={{ flex: 1, justifyContent: 'center', backgroundColor: 'var(--danger)', boxShadow: '0 4px 14px 0 rgba(220, 38, 38, 0.39)' }}
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

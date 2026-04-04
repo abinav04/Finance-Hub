@@ -6,7 +6,7 @@ import {
 import { Wallet, TrendingUp, TrendingDown, Calendar } from 'lucide-react';
 import Dropdown from './Dropdown';
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#64748b'];
+const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', 'var(--text-secondary)'];
 
 export default function DashboardOverview({ transactions }) {
   const [trendViewType, setTrendViewType] = React.useState('Monthly');
@@ -204,9 +204,9 @@ export default function DashboardOverview({ transactions }) {
       </div>
 
       <div className="dashboard-grid">
-        <div className="glass-panel" style={{ minWidth: 0, overflow: 'hidden', padding: '32px', backgroundColor: '#fff', borderRadius: '24px', display: 'flex', flexDirection: 'column', boxShadow: 'var(--shadow-md)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#1a1b25' }}>Balance Trend</h3>
+        <div className="glass-panel" style={{ minWidth: 0, overflow: 'hidden', padding: '32px', backgroundColor: 'var(--bg-secondary)', borderRadius: '24px', display: 'flex', flexDirection: 'column', boxShadow: 'var(--shadow-md)' }}>
+          <div className="chart-header">
+            <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)' }}>Balance Trend</h3>
             <div className="input-group" style={{ padding: '2px 8px', maxWidth: '140px' }}>
               <Calendar size={16} color="var(--text-tertiary)" />
               <Dropdown 
@@ -224,11 +224,11 @@ export default function DashboardOverview({ transactions }) {
           <div style={{ display: 'flex', gap: '24px', marginTop: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#22c55e' }}></div>
-              <span style={{ fontSize: '14px', color: '#8e90a0', fontWeight: 500 }}>Total income</span>
+              <span style={{ fontSize: '14px', color: 'var(--text-secondary)', fontWeight: 500 }}>Total income</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#f97316' }}></div>
-              <span style={{ fontSize: '14px', color: '#8e90a0', fontWeight: 500 }}>Total expenses</span>
+              <span style={{ fontSize: '14px', color: 'var(--text-secondary)', fontWeight: 500 }}>Total expenses</span>
             </div>
           </div>
 
@@ -236,7 +236,7 @@ export default function DashboardOverview({ transactions }) {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={statisticsData} margin={{ top: 20, right: 10, left: 10, bottom: 0 }}>
                 <CartesianGrid vertical={false} horizontal={false} />
-                <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 13, fill: '#8e90a0', fontWeight: 500 }} dy={10} />
+                <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 13, fill: 'var(--text-secondary)', fontWeight: 500 }} dy={10} />
                 <Tooltip 
                   cursor={{ stroke: '#e2e8f0', strokeWidth: 2, strokeDasharray: '5 5' }}
                   content={({ active, payload }) => {
@@ -247,8 +247,8 @@ export default function DashboardOverview({ transactions }) {
                             const isIncome = entry.dataKey === 'income';
                             return (
                               <div key={index} style={{
-                                backgroundColor: isIncome ? '#1a1b25' : '#ffffff',
-                                color: isIncome ? '#ffffff' : '#1a1b25',
+                                backgroundColor: isIncome ? 'var(--text-primary)' : 'var(--bg-primary)',
+                                color: isIncome ? 'var(--bg-primary)' : 'var(--text-primary)',
                                 padding: '6px 14px',
                                 borderRadius: '20px',
                                 border: isIncome ? 'none' : '1px solid #e2e8f0',
@@ -277,13 +277,13 @@ export default function DashboardOverview({ transactions }) {
             </ResponsiveContainer>
           </div>
 
-          <div style={{ borderTop: '1px solid #f1f5f9', marginTop: '16px', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', paddingBottom: '8px' }}>
+          <div className="avg-stats-container" style={{ borderTop: '1px solid var(--border-color)', marginTop: '16px', paddingTop: '24px', paddingBottom: '8px' }}>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '14px', color: '#8e90a0', fontWeight: 500 }}>Average income</div>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: '#1a1b25', marginTop: '4px', letterSpacing: '-0.02em' }}>
+              <div style={{ fontSize: '14px', color: 'var(--text-secondary)', fontWeight: 500 }}>Average income</div>
+              <div style={{ fontSize: '32px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '4px', letterSpacing: '-0.02em' }}>
                 ${avgIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
-              <div style={{ fontSize: '14px', fontWeight: 500, marginTop: '4px', color: '#8e90a0' }}>
+              <div style={{ fontSize: '14px', fontWeight: 500, marginTop: '4px', color: 'var(--text-secondary)' }}>
                 <span style={{ color: incomeGrowth >= 0 ? '#22c55e' : '#ef4444', marginRight: '6px', fontWeight: 600 }}>
                   {incomeGrowth > 0 ? '+' : ''}{incomeGrowth.toFixed(1)}%
                 </span> 
@@ -291,11 +291,11 @@ export default function DashboardOverview({ transactions }) {
               </div>
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '14px', color: '#8e90a0', fontWeight: 500 }}>Average expenses</div>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: '#1a1b25', marginTop: '4px', letterSpacing: '-0.02em' }}>
+              <div style={{ fontSize: '14px', color: 'var(--text-secondary)', fontWeight: 500 }}>Average expenses</div>
+              <div style={{ fontSize: '32px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '4px', letterSpacing: '-0.02em' }}>
                 ${avgExpenses.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
-              <div style={{ fontSize: '14px', fontWeight: 500, marginTop: '4px', color: '#8e90a0' }}>
+              <div style={{ fontSize: '14px', fontWeight: 500, marginTop: '4px', color: 'var(--text-secondary)' }}>
                 <span style={{ color: expenseGrowth >= 0 ? '#ef4444' : '#22c55e', marginRight: '6px', fontWeight: 600 }}>
                   {expenseGrowth > 0 ? '+' : ''}{expenseGrowth.toFixed(1)}%
                 </span> 
@@ -305,21 +305,21 @@ export default function DashboardOverview({ transactions }) {
           </div>
         </div>
 
-        <div className="glass-panel" style={{ minWidth: 0, overflow: 'hidden', padding: '32px', backgroundColor: '#fff', borderRadius: '24px', display: 'flex', flexDirection: 'column', boxShadow: 'var(--shadow-md)' }}>
-          <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#1a1b25', marginBottom: '32px' }}>All expenses</h3>
+        <div className="glass-panel" style={{ minWidth: 0, overflow: 'hidden', padding: '32px', backgroundColor: 'var(--bg-secondary)', borderRadius: '24px', display: 'flex', flexDirection: 'column', boxShadow: 'var(--shadow-md)' }}>
+          <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '32px' }}>All expenses</h3>
           
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '32px' }}>
+          <div className="expense-stats-container">
             <div>
-              <div style={{ fontSize: '13px', color: '#8e90a0', fontWeight: 500, marginBottom: '8px' }}>Daily</div>
-              <div style={{ fontSize: '16px', fontWeight: 700, color: '#1a1b25' }}>${expenseMetrics.daily.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 500, marginBottom: '8px' }}>Daily</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>${expenseMetrics.daily.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
             </div>
             <div>
-              <div style={{ fontSize: '13px', color: '#8e90a0', fontWeight: 500, marginBottom: '8px' }}>Weekly</div>
-              <div style={{ fontSize: '16px', fontWeight: 700, color: '#1a1b25' }}>${expenseMetrics.weekly.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 500, marginBottom: '8px' }}>Weekly</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>${expenseMetrics.weekly.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
             </div>
             <div>
-              <div style={{ fontSize: '13px', color: '#8e90a0', fontWeight: 500, marginBottom: '8px' }}>Monthly</div>
-              <div style={{ fontSize: '16px', fontWeight: 700, color: '#1a1b25' }}>${expenseMetrics.monthly.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 500, marginBottom: '8px' }}>Monthly</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>${expenseMetrics.monthly.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
             </div>
           </div>
 
@@ -339,7 +339,7 @@ export default function DashboardOverview({ transactions }) {
                   <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
                   <RadialBar
                     minAngle={15}
-                    background={{ fill: '#f8fafc' }}
+                    background={{ fill: 'var(--bg-tertiary)' }}
                     clockWise
                     dataKey="value"
                     cornerRadius={12}
@@ -351,14 +351,14 @@ export default function DashboardOverview({ transactions }) {
                         const data = payload[0].payload;
                         return (
                           <div style={{
-                            backgroundColor: '#ffffff',
+                            backgroundColor: 'var(--bg-primary)',
                             padding: '12px 16px',
                             borderRadius: '12px',
                             boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
-                            border: '1px solid #f1f5f9'
+                            border: '1px solid var(--border-color)'
                           }}>
-                            <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 500, marginBottom: '4px' }}>{data.name}</div>
-                            <div style={{ fontSize: '16px', fontWeight: 700, color: '#0f172a' }}>${data.realValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                            <div style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 500, marginBottom: '4px' }}>{data.name}</div>
+                            <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>${data.realValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                           </div>
                         );
                       }
@@ -373,15 +373,14 @@ export default function DashboardOverview({ transactions }) {
               </div>
             )}
           </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '32px' }}>
+          <div className="expense-legend-container" style={{ marginTop: '32px' }}>
             {expenseRadialData.map((item, index) => (
-              <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div key={index} className="expense-legend-item">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: item.fill }}></div>
-                  <span style={{ fontSize: '15px', color: '#64748b', fontWeight: 500 }}>{item.name}</span>
+                  <span style={{ fontSize: '15px', color: 'var(--text-secondary)', fontWeight: 500 }}>{item.name}</span>
                 </div>
-                <div style={{ fontSize: '15px', color: '#1a1b25', fontWeight: 700 }}>
+                <div style={{ fontSize: '15px', color: 'var(--text-primary)', fontWeight: 700 }}>
                   {item.displayPercentage.toFixed(1)}%
                 </div>
               </div>

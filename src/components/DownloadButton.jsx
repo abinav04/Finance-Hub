@@ -6,7 +6,7 @@ export default function DownloadButton({ transactions }) {
   const handleDownload = () => {
     // 1. Transaction Data
     const transactionRows = transactions.map(t => ({
-      Date: new Date(t.date).toLocaleDateString(),
+      Date: new Date(t.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }),
       Merchant: t.merchant,
       Category: t.category,
       Type: t.type.toUpperCase(),

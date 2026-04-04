@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function TransactionDetailsModal({ transaction, onClose }) {
+  useEffect(() => {
+    if (transaction) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [transaction]);
+
   if (!transaction) return null;
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -29,7 +40,7 @@ export default function TransactionDetailsModal({ transaction, onClose }) {
         <div style={{ display: 'flex', flexDirection: 'column', paddingTop: '8px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', padding: '20px 0' }}>
             <span style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Date</span>
-            <span style={{ fontSize: '16px', fontWeight: 500, color: 'var(--text-primary)' }}>{new Date(transaction.date).toLocaleDateString()}</span>
+            <span style={{ fontSize: '16px', fontWeight: 500, color: 'var(--text-primary)' }}>{new Date(transaction.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', padding: '20px 0' }}>
             <span style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Merchant</span>
