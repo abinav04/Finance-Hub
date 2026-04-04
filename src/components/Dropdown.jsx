@@ -49,7 +49,7 @@ export default function Dropdown({ value, onChange, options, icon: Icon, fullWid
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {Icon && <Icon size={16} color="var(--text-tertiary)" />}
-          <span style={{ minWidth: '90px', textAlign: 'left' }}>{selectedLabel}</span>
+          <span style={{ textAlign: 'left' }}>{selectedLabel}</span>
         </div>
         <ChevronDown 
           size={14} 
