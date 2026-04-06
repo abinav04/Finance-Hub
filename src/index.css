@@ -252,15 +252,57 @@ input, select {
 }
 
 @media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .header-text > div {
+    justify-content: center !important;
+  }
+
   .header-actions {
-    gap: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
   }
   
   .tabs-container {
-    padding-bottom: 8px;
-    gap: 12px;
+    padding: 0 4px 12px 4px;
+    gap: 8px;
+    overflow-x: auto;
+    width: 100%;
+    justify-content: center;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .tabs-container::-webkit-scrollbar {
+    display: none;
   }
   
+  .tabs-container .btn {
+    padding: 10px 16px;
+    white-space: nowrap;
+    min-width: max-content;
+    flex: 0 1 auto;
+    font-size: 14px;
+  }
+
   .summary-grid {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -272,109 +314,92 @@ input, select {
   }
 }
 
-@media (max-width: 640px) {
-  .header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 24px;
-    margin-bottom: 32px;
-  }
-  
-  .header-text > div {
-    justify-content: center;
-  }
-
-  .header-actions {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    gap: 12px;
-  }
-  
+@media (max-width: 480px) {
   .tabs-container {
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
+    gap: 6px;
   }
 
-  .summary-card-amount {
-    font-size: clamp(20px, 6vw, 28px);
+  .tabs-container .btn {
+    padding: 10px 12px;
+    font-size: 13px;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
   }
 }
 
 @media (max-width: 480px) {
   .header-actions {
+    background-color: transparent;
+    padding: 8px 0;
+    border: none;
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    gap: 12px;
+    gap: 8px !important;
     width: 100%;
-    flex-wrap: nowrap;
-  }
-  
-  .header-actions > * {
-    flex: 0 1 auto;
-    min-width: 0;
   }
 
-  .header-actions .btn, .header-actions .role-selector-btn, .header-actions .theme-toggle-container {
-    padding: 6px 14px !important;
+  /* Row 1 items: Export, Theme, Role */
+  
+  /* Export Button (DownloadButton component provides this) */
+  .header-actions > button:not(.btn-primary) {
+    order: 1;
+    flex: 1 1 0;
+    min-width: 100px;
+    padding: 10px 8px !important;
     font-size: 13px !important;
-    white-space: nowrap;
-    height: 38px;
+    height: 40px !important;
+  }
+
+  /* Theme Toggle */
+  .theme-toggle-container {
+    order: 2;
+    flex: 0 0 auto;
+    width: auto !important;
+    margin-bottom: 0 !important;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: center;
   }
-  
+
+  .theme-toggle-container > div {
+    background: var(--bg-secondary) !important;
+    box-shadow: var(--shadow-sm) !important;
+    padding: 4px 6px !important;
+    height: 40px !important;
+    border-radius: var(--radius-full) !important;
+  }
+
+  /* Role Selector (Wrapper div around button) */
+  .header-actions > div:not(.theme-toggle-container) {
+    order: 3;
+    flex: 1 1 0;
+    min-width: 100px;
+    height: 40px !important;
+  }
+
+  .header-actions > div:not(.theme-toggle-container) .btn {
+     width: 100%;
+     height: 100% !important;
+     padding: 0 12px !important;
+     font-size: 13px !important;
+  }
+
+  /* Row 2: Add Transaction */
+  .header-actions .btn-primary {
+    order: 4;
+    flex: 1 1 100% !important;
+    padding: 12px !important;
+    height: 48px !important;
+    margin-top: 4px;
+    font-size: 15px !important;
+    border-radius: var(--radius-lg);
+  }
+
   .header-actions span {
-    display: inline; /* Keep names but don't force width */
-    margin-left: 4px;
-  }
-
-  /* Specific sizing for toggle icons to keep them compact */
-  .header-actions .theme-toggle-container div[style*="width: 38px"] {
-    width: 30px !important;
-    height: 30px !important;
-  }
-
-  .header-actions .theme-toggle-container div[style*="width: 38px"] svg {
-    width: 14px !important;
-    height: 14px !important;
-  }
-
-  .tabs-container {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 0 4px 12px 4px;
-    border-bottom: 2px solid var(--border-color);
-    margin-bottom: 32px;
-  }
-  
-  .tabs-container .btn {
-    flex: 1;
-    padding: 10px 4px;
-    font-size: clamp(10px, 3vw, 12px);
-    gap: 4px;
-    min-width: 0;
-    max-width: none;
-  }
-
-  /* Hide tab text only on very narrow screens if needed, 
-     but first try with smaller padding/font */
-  /* Optimized Tab Spacing */
-  .tabs-container .btn span {
-     display: inline;
-  }
-  .tabs-container .btn {
-     padding: 10px 4px;
-     font-size: clamp(10px, 3vw, 12px);
-     gap: 4px;
+    font-size: 13px;
+    white-space: nowrap;
   }
 }
 
@@ -594,6 +619,21 @@ input, select {
   .table td[style*="text-align: right"] {
     text-align: left !important;
     justify-content: space-between;
+  }
+
+  /* Actions column fix for mobile */
+  .table td:last-child {
+    width: 100% !important;
+    overflow: visible !important;
+    padding: 12px 0 !important;
+    margin-top: 8px;
+    border-top: 1px dashed var(--border-color);
+    display: flex !important;
+    justify-content: center !important;
+  }
+  
+  .table td:last-child::before {
+    display: none !important; /* Hide "Actions" label to give buttons more space */
   }
 }
 
