@@ -1,10 +1,10 @@
 # Finance Hub | Global Financial Intelligence Dashboard
 
-![Dashboard Desktop](public/screenshots/dashboard_desktop.png)
+![alt text](image.png)
 
 *Desktop View — Full Financial Analytics*
 
-![Dashboard Mobile](public/screenshots/dashboard_mobile.png)
+![alt text](image-1.png)
 
 *Mobile View — Optimized Transaction Management*
 
