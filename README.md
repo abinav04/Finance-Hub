@@ -1,5 +1,13 @@
 # Finance Hub | Global Financial Intelligence Dashboard
 
+![Dashboard Desktop](public/screenshots/dashboard_desktop.png)
+
+*Desktop View — Full Financial Analytics*
+
+![Dashboard Mobile](public/screenshots/dashboard_mobile.png)
+
+*Mobile View — Optimized Transaction Management*
+
 A high-performance, responsive finance management suite built for precision and clarity. Finance Hub transforms raw transaction data into actionable financial insights through a premium, dark-mode-first interface inspired by the world's leading fintech platforms.
 
 This project was built from the ground up with a focus on **Responsive Engineering**—ensuring a "desktop-class" experience even on the smallest handheld devices.
