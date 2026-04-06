@@ -165,13 +165,13 @@ export default function InsightsPanel({ transactions }) {
       </div>
 
       {/* Monthly Comparison Card */}
-      <div className="glass-panel" style={{ gridColumn: '1 / -1' }}>
+      <div className="glass-panel insights-comparison-card">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
           <TrendingDown size={24} color="var(--accent-primary)" />
           <h3 style={{ fontSize: '20px', fontWeight: 700 }}>Monthly Performance</h3>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+        <div className="insights-comparison-grid">
           {/* Income Comparison */}
           <div style={{ 
             padding: '24px', 

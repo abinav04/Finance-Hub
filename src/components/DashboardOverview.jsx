@@ -204,7 +204,7 @@ export default function DashboardOverview({ transactions }) {
       </div>
 
       <div className="dashboard-grid">
-        <div className="glass-panel" style={{ minWidth: 0, overflow: 'hidden', padding: '32px', backgroundColor: 'var(--bg-secondary)', borderRadius: '24px', display: 'flex', flexDirection: 'column', boxShadow: 'var(--shadow-md)' }}>
+        <div className="glass-panel" style={{ minWidth: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           <div className="chart-header">
             <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)' }}>Balance Trend</h3>
             <div className="input-group" style={{ padding: '2px 8px', maxWidth: '140px' }}>
@@ -232,7 +232,7 @@ export default function DashboardOverview({ transactions }) {
             </div>
           </div>
 
-          <div style={{ height: '260px', width: '100%', minWidth: 0, marginTop: '16px' }}>
+          <div className="chart-container" style={{ height: '260px', width: '100%', minWidth: 0, marginTop: '24px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={statisticsData} margin={{ top: 20, right: 10, left: 10, bottom: 0 }}>
                 <CartesianGrid vertical={false} horizontal={false} />
@@ -277,10 +277,10 @@ export default function DashboardOverview({ transactions }) {
             </ResponsiveContainer>
           </div>
 
-          <div className="avg-stats-container" style={{ borderTop: '1px solid var(--border-color)', marginTop: '16px', paddingTop: '24px', paddingBottom: '8px' }}>
+          <div className="avg-stats-container" style={{ borderTop: '1px solid var(--border-color)', marginTop: '24px', paddingTop: '24px', paddingBottom: '8px' }}>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: '14px', color: 'var(--text-secondary)', fontWeight: 500 }}>Average income</div>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '4px', letterSpacing: '-0.02em' }}>
+              <div style={{ fontSize: 'clamp(24px, 5vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginTop: '4px', letterSpacing: '-0.02em' }}>
                 ${avgIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
               <div style={{ fontSize: '14px', fontWeight: 500, marginTop: '4px', color: 'var(--text-secondary)' }}>
@@ -292,7 +292,7 @@ export default function DashboardOverview({ transactions }) {
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: '14px', color: 'var(--text-secondary)', fontWeight: 500 }}>Average expenses</div>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '4px', letterSpacing: '-0.02em' }}>
+              <div style={{ fontSize: 'clamp(24px, 5vw, 32px)', fontWeight: 700, color: 'var(--text-primary)', marginTop: '4px', letterSpacing: '-0.02em' }}>
                 ${avgExpenses.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
               <div style={{ fontSize: '14px', fontWeight: 500, marginTop: '4px', color: 'var(--text-secondary)' }}>
@@ -305,7 +305,7 @@ export default function DashboardOverview({ transactions }) {
           </div>
         </div>
 
-        <div className="glass-panel" style={{ minWidth: 0, overflow: 'hidden', padding: '32px', backgroundColor: 'var(--bg-secondary)', borderRadius: '24px', display: 'flex', flexDirection: 'column', boxShadow: 'var(--shadow-md)' }}>
+        <div className="glass-panel" style={{ minWidth: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '32px' }}>All expenses</h3>
           
           <div className="expense-stats-container">

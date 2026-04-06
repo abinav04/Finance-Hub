@@ -59,38 +59,18 @@ export default function AddTransactionModal({ onClose, onAdd }) {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Type</label>
-            <div style={{ display: 'flex', gap: '16px' }}>
+            <div className="toggle-group">
               <button
                 type="button"
                 onClick={() => handleChange({ target: { name: 'type', value: 'expense' } })}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  borderRadius: 'var(--radius-md)',
-                  border: formData.type === 'expense' ? '2px solid var(--danger)' : '1px solid var(--border-color)',
-                  backgroundColor: formData.type === 'expense' ? 'var(--danger-bg)' : 'var(--bg-tertiary)',
-                  color: formData.type === 'expense' ? 'var(--danger)' : 'var(--text-primary)',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
+                className={`toggle-btn ${formData.type === 'expense' ? 'active-expense' : ''}`}
               >
                 Expense
               </button>
               <button
                 type="button"
                 onClick={() => handleChange({ target: { name: 'type', value: 'income' } })}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  borderRadius: 'var(--radius-md)',
-                  border: formData.type === 'income' ? '2px solid var(--success)' : '1px solid var(--border-color)',
-                  backgroundColor: formData.type === 'income' ? 'var(--success-bg)' : 'var(--bg-tertiary)',
-                  color: formData.type === 'income' ? 'var(--success)' : 'var(--text-primary)',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
+                className={`toggle-btn ${formData.type === 'income' ? 'active-income' : ''}`}
               >
                 Income
               </button>
@@ -139,35 +119,13 @@ export default function AddTransactionModal({ onClose, onAdd }) {
 
           <div className="form-group">
             <label>Category</label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>
+            <div className="category-group">
               {CATEGORIES.map(cat => (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => handleChange({ target: { name: 'category', value: cat } })}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: 'var(--radius-full)',
-                    border: formData.category === cat ? '1px solid var(--accent-primary)' : '1px solid var(--border-color)',
-                    backgroundColor: formData.category === cat ? 'var(--accent-light)' : 'var(--bg-tertiary)',
-                    color: formData.category === cat ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                    fontWeight: 600,
-                    fontSize: '13px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (formData.category !== cat) {
-                      e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-                      e.currentTarget.style.color = 'var(--text-primary)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (formData.category !== cat) {
-                      e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)';
-                      e.currentTarget.style.color = 'var(--text-secondary)';
-                    }
-                  }}
+                  className={`category-chip ${formData.category === cat ? 'active' : ''}`}
                 >
                   {cat}
                 </button>

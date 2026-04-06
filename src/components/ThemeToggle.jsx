@@ -11,10 +11,11 @@ export default function ThemeToggle({ theme, toggleTheme }) {
       style={{
         display: 'flex',
         alignItems: 'center',
-        padding: '4px',
+        padding: '2px',
         borderRadius: '9999px',
         backgroundColor: 'var(--bg-secondary)',
         border: '1px solid var(--border-color)',
+        height: '32px',
         cursor: 'pointer',
         position: 'relative',
         boxShadow: '0 1px 2px rgba(0,0,0,0.02)'
@@ -22,7 +23,7 @@ export default function ThemeToggle({ theme, toggleTheme }) {
       title="Toggle Theme"
     >
       {/* Light Mode Trigger */}
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', zIndex: 1 }}>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', zIndex: 1 }}>
         {isLight && (
           <motion.div
             layoutId="theme-thumb"
@@ -45,7 +46,7 @@ export default function ThemeToggle({ theme, toggleTheme }) {
       </div>
 
       {/* Dark Mode Trigger */}
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', zIndex: 1, marginLeft: '4px' }}>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', zIndex: 1, marginLeft: '2px' }}>
         {!isLight && (
           <motion.div
             layoutId="theme-thumb"

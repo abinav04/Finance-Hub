@@ -48,7 +48,7 @@ export default function TransactionsList({ transactions, role, onDelete, onEdit,
   }, [transactions, searchTerm, filterType, sortBy]);
 
   return (
-    <div className="glass-panel" style={{ height: 'calc(100vh - 260px)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div className="glass-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <div className="flex flex-col gap-6" style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
         <div className="flex justify-between items-center" style={{ flexWrap: 'wrap', gap: '16px' }}>
           <div className="input-group" style={{ maxWidth: '300px', flex: 1 }}>
@@ -120,15 +120,15 @@ export default function TransactionsList({ transactions, role, onDelete, onEdit,
                     style={{ cursor: 'pointer' }}
                     className="hoverable-row"
                   >
-                    <td>{new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
-                    <td style={{ fontWeight: 500 }}>{tx.merchant}</td>
-                    <td>{tx.category}</td>
-                    <td>
+                    <td data-label="Date">{new Date(tx.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
+                    <td data-label="Merchant" style={{ fontWeight: 500 }}>{tx.merchant}</td>
+                    <td data-label="Category">{tx.category}</td>
+                    <td data-label="Type">
                       <span className={`badge ${tx.type}`}>
                         {tx.type === 'income' ? 'Income' : 'Expense'}
                       </span>
                     </td>
-                    <td style={{ textAlign: 'right' }} className={`tx-amount ${tx.type}`}>
+                    <td data-label="Amount" style={{ textAlign: 'right' }} className={`tx-amount ${tx.type}`}>
                       {tx.type === 'income' ? '+' : '-'}${Number(tx.amount).toFixed(2)}
                     </td>
                     <AnimatePresence>
@@ -140,7 +140,7 @@ export default function TransactionsList({ transactions, role, onDelete, onEdit,
                           transition={{ type: "spring", stiffness: 300, damping: 28 }}
                           style={{ textAlign: 'center', overflow: 'hidden', padding: 0 }}
                         >
-                          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                           <div data-label="Actions" style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
                             <motion.button 
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}

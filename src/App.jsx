@@ -106,7 +106,7 @@ function App() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="app-container"
-          style={{ width: '100vw' }}
+          style={{ width: '100%' }}
         >
       <Toaster 
         position="top-right" 
@@ -127,10 +127,10 @@ function App() {
       {/* Sidebar can be added here if needed, but keeping it top-nav for simplicity */}
       <main className="main-content">
         <header className="header">
-          <div>
+          <div className="header-text">
             <div 
               onClick={() => handleTabChange('dashboard')} 
-              style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px' }}
+              style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', justifyContent: 'inherit' }}
               title="Go to Overview"
             >
               <Logo size={32} />
@@ -145,7 +145,9 @@ function App() {
             <DownloadButton transactions={transactions} />
             <RoleSelector role={role} setRole={setRole} />
             
-            <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+            <div className="theme-toggle-container">
+              <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+            </div>
             
             <AnimatePresence>
               {role === 'admin' && (
@@ -170,19 +172,19 @@ function App() {
             className={`btn ${activeTab === 'dashboard' ? 'btn-primary' : 'btn-icon'}`}
             onClick={() => handleTabChange('dashboard')}
           >
-            <LayoutDashboard size={18} /> Overview
+            <LayoutDashboard size={18} /> <span>Overview</span>
           </button>
           <button 
             className={`btn ${activeTab === 'transactions' ? 'btn-primary' : 'btn-icon'}`}
             onClick={() => handleTabChange('transactions')}
           >
-            <List size={18} /> Transactions
+            <List size={18} /> <span>Transactions</span>
           </button>
           <button 
             className={`btn ${activeTab === 'insights' ? 'btn-primary' : 'btn-icon'}`}
             onClick={() => handleTabChange('insights')}
           >
-            <Lightbulb size={18} /> Insights
+            <Lightbulb size={18} /> <span>Insights</span>
           </button>
         </div>
 

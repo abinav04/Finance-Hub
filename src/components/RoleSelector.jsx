@@ -29,6 +29,7 @@ export default function RoleSelector({ role, setRole }) {
   return (
     <div style={{ position: 'relative' }} ref={dropdownRef}>
       <button 
+        className="btn"
         onClick={() => setIsOpen(!isOpen)}
         style={{
           display: 'flex',
